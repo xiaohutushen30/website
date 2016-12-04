@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Role List
+{% endblock %}
+
+{% block content %}
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "listroomstatusurl" as thelistroomstatusurl %}
+            <a class="btn btn-default {%if request.path = thelistroomstatusurl%} active {%endif%}" href={{ thelistroomstatusurl }}><span class="glyphicon glyphicon-edit"></span>实时信息</a>
+            {% url "historystatusurl" as thehistorystatusurl %}
+            <a class="btn btn-default {%if request.path = thehistorystatusurl%} active {%endif%}" href={{ thehistorystatusurl }}><span class="glyphicon glyphicon-list"></span>历史信息</a>
+        </div>
+    </div>
+
+    <hr/>
+    <div id="main" style="width: auto;height:400px;"></div>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var myChart = echarts.init(document.getElementById('main'));
+            $.ajax({ 
+                type : "get", 
+                url : "/monitor/historydata", 
+                data : "", 
+                async : false, 
+                success : function(data){ 
+                    window.data = eval(data);
+                } 
+            }); 
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: '机房出入历史记录'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    data: window.data.map(function (item) {
+                        return item[0];
+                    })
+                },
+                yAxis: {
+                    splitLine: {
+                        show: false
+                    }
+                },
+                toolbox: {
+                    left: 'center',
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        restore: {},
+                        saveAsImage: {}
+                    }
+                },
+                dataZoom: [{
+                    startValue: '2016-10-30 04:15'
+                }, {
+                    type: 'inside'
+                }],
+                series: {
+                    name: '机房出入历史记录',
+                    type: 'line',
+                    data: window.data.map(function (item) {
+                        return item[1];
+                    }),
+                }
+            };
+            myChart.setOption(option);  
+        });
+    </script>
+{% endblock %}

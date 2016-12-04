@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Role List
+{% endblock %}
+
+{% block content %}
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            {% url "addroomurl" as theaddroomurl %}
+            <a class="btn btn-default {%if request.path = theaddroomurl%} active {%endif%}" href={{ theaddroomurl }}><span class="glyphicon glyphicon-edit"></span>新建机房</a>
+            {% url "listroomurl" as thelistroomurl %}
+            <a class="btn btn-default {%if request.path = thelistroomurl%} active {%endif%}" href={{ thelistroomurl }}><span class="glyphicon glyphicon-list"></span>机房列表</a>
+        </div>
+    </div>
+
+    <hr/>
+
+    <table class="table table-hover table-striped  table-bordered table-condensed">
+        <tr>
+            <th>机房编号</th>
+            <th>机房名称</th>
+            <th>是否启用</th>
+            <th>操作</th>
+        </tr>
+
+        {% for i in lPage %}
+            <tr style="font-size: 13px;">
+                <td>{{ i.roomsn }} </td>
+                <td>{{ i.name }} </td>
+                <td>
+                    {% if i.is_active %}
+                        <span class="label label-success">启用</span>
+                    {% else %}
+                        <span class="label label-default">禁用</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href={% url "editroomurl" i.id %} onclick="return confirm('确认编辑机房吗？？')"><span class="glyphicon glyphicon-edit btn-xs"></span></a>
+                    <a href={% url "deleteroomurl" i.id %} onclick="return confirm('确认删除机房吗？？')"><span class="glyphicon glyphicon-trash btn-xs"></span></a>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+    {% include "common/paginator.html" %}
+{% endblock %}
