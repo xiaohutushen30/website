@@ -46,7 +46,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     username = models.CharField(max_length=40, unique=True, db_index=True)
-    personsn = models.CharField(max_length=64, unique=True, db_index=True)
+    personsn = models.CharField(max_length=64, unique=True, db_index=True, null=True)
     email = models.EmailField(max_length=255)
     is_active = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
