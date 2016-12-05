@@ -81,9 +81,9 @@ if None:
     from sae.const import (
         MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB)
 else:
-    MYSQL_HOST = 'localhost'
+    MYSQL_HOST = '103.15.201.7'
     MYSQL_PORT = '3306'
-    MYSQL_USER = 'root'
+    MYSQL_USER = 'jiexi'
     MYSQL_PASS = 'password'
     MYSQL_DB = 'accounts'
 
