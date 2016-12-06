@@ -5,12 +5,16 @@
 {% endblock %}
 
 {% block content %}
-    <div class="btn-toolbar">
-        <div class="btn-group">
+    <div class="btn-toolbar" >
+        <div class="btn-group" >
             {% url "listroomstatusurl" as thelistroomstatusurl %}
             <a class="btn btn-default {%if request.path = thelistroomstatusurl%} active {%endif%}" href={{ thelistroomstatusurl }}><span class="glyphicon glyphicon-edit"></span>实时信息</a>
             {% url "historystatusurl" as thehistorystatusurl %}
             <a class="btn btn-default {%if request.path = thehistorystatusurl%} active {%endif%}" href={{ thehistorystatusurl }}><span class="glyphicon glyphicon-list"></span>历史信息</a>
+
+        </div>
+        <div class="btn-group" style="float:right;padding-right:40px;">
+                <a class="btn btn-default btn-danger" {% comment %}href={% url "dowarningurl"  %}{% endcomment %}>手动报警</a>
         </div>
     </div>
 

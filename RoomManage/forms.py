@@ -3,14 +3,14 @@
 #update:2014-09-12 by liufeily@163.com
 
 from django import forms
-from RoomManage.models import Room
+from RoomManage.models import Room,RoomTemporary
 
 class AddRoomForm(forms.ModelForm):
     class Meta:
         model = Room     
         fields = ('roomsn','name','is_active')
         widgets = {
-            'roomsn' : forms.TextInput(attrs={'class':'form-control'}),
+            'roomsn' : forms.Select(choices=[(x.roomsn,x.roomsn) for x in RoomTemporary.objects.all()],attrs={'class':'form-control'}),
             'name' : forms.TextInput(attrs={'class':'form-control'}),
             'is_active' : forms.Select(choices=((True, u'启用'),(False, u'禁用')),attrs={'class':'form-control'}),
         }

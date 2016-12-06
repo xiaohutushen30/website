@@ -11,3 +11,6 @@ class Room(models.Model):
     is_add = models.BooleanField(default=False)
     def __unicode__(self):
         return self.name
+
+class RoomTemporary(models.Model):
+    roomsn = models.CharField(max_length=64, unique=True, db_index=True)

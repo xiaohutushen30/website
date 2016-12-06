@@ -45,9 +45,11 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser):
+    is_staff = models.BooleanField(default=False)
     username = models.CharField(max_length=40, unique=True, db_index=True)
     personsn = models.CharField(max_length=64, unique=True, db_index=True, null=True)
     email = models.EmailField(max_length=255)
+    phone = models.CharField(max_length=20, null=True)
     is_active = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     nickname = models.CharField(max_length=64, null=True)
@@ -62,3 +64,5 @@ class User(AbstractBaseUser):
         if self.is_active and self.is_superuser:
             return True
 
+class UserTemporary(models.Model):
+    personsn = models.CharField(max_length=64, unique=True, db_index=True)

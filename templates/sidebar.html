@@ -8,17 +8,25 @@
                     <div id="collapseOne" class="panel-collapse collapse {% if 'monitor' in request.path %} in {% endif %}">
                         <div class="panel-body">
                             <table class="table">
-                                <tbody><tr>
-                                    <td>
-                                        <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroomstatusurl" %}>机房1</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroomstatusurl" %}>机房2</a>
-                                    </td>
-                                </tr>
-                            </tbody></table>
+                                <tbody>
+
+                                    {% for room in all_room %}
+                                        <tr><td>
+                                            <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroomstatusurl" %}>{{ room.name }}</a>
+                                        </td></tr>
+                                    {% endfor %}
+<!--                                     <tr>
+                                        <td>
+                                            <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroomstatusurl" %}>机房1</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroomstatusurl" %}>机房2</a>
+                                        </td>
+                                    </tr> -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -57,7 +65,7 @@
                                             <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listuserurl" %}>用户管理</a>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td>
                                             <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroleurl" %}>角色管理</a>
                                         </td>
@@ -66,7 +74,7 @@
                                         <td>
                                             <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listpermissionurl" %}>权限管理</a>
                                         </td>
-                                    </tr>
+                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>

@@ -5,7 +5,7 @@
 from django import forms
 from django.contrib import auth
 from django.contrib.auth import get_user_model
-from UserManage.models import User,RoleList,PermissionList
+from UserManage.models import User,RoleList,PermissionList,UserTemporary
 
 class LoginUserForm(forms.Form):
     username = forms.CharField(label=u'账 号',error_messages={'required':u'账号不能为空'},
@@ -72,11 +72,14 @@ class ChangePasswordForm(forms.Form):
 class AddUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username','password','email','nickname','sex','role','is_active')
+        fields = ('is_staff','personsn','username','password','email','phone','nickname','sex','role','is_active')
         widgets = {
+            'is_staff': forms.Select(choices=((True, u'是'),(False, u'否')),attrs={'class':'form-control'}),
+            'personsn': forms.Select(choices=[(x.personsn,x.personsn) for x in UserTemporary.objects.all()],attrs={'class':'form-control'}),
             'username' : forms.TextInput(attrs={'class':'form-control'}),
             'password' : forms.PasswordInput(attrs={'class':'form-control'}),
             'email' : forms.TextInput(attrs={'class':'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'nickname' : forms.TextInput(attrs={'class':'form-control'}),
             'sex' : forms.RadioSelect(choices=((u'男', u'男'),(u'女', u'女')),attrs={'class':'list-inline'}),
             'role' : forms.Select(attrs={'class':'form-control'}),
@@ -85,12 +88,17 @@ class AddUserForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         super(AddUserForm,self).__init__(*args,**kwargs)
+        self.fields['is_staff'].label = u'内部员工'
+        self.fields['personsn'].label = u'标 识'
+        self.fields['personsn'].error_messages = {'required': u'请输入标识'}
         self.fields['username'].label=u'账 号'
         self.fields['username'].error_messages={'required':u'请输入账号'}
         self.fields['password'].label=u'密 码'
         self.fields['password'].error_messages={'required':u'请输入密码'}
         self.fields['email'].label=u'邮 箱'
         self.fields['email'].error_messages={'required':u'请输入邮箱','invalid':u'请输入有效邮箱'}
+        self.fields['phone'].label = u'手 机'
+        self.fields['phone'].error_messages = {'required': u'请输入手机', 'invalid': u'请输入有效手机'}
         self.fields['nickname'].label=u'姓 名'
         self.fields['nickname'].error_messages={'required':u'请输入姓名'}
         self.fields['sex'].label=u'性 别'
@@ -107,11 +115,14 @@ class AddUserForm(forms.ModelForm):
 class EditUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username','email','nickname','sex','role','is_active')
+        fields = ('is_staff','personsn','username','email','phone','nickname','sex','role','is_active')
         widgets = {
+            'is_staff': forms.Select(choices=((True, u'是'), (False, u'否')), attrs={'class': 'form-control'}),
+            'personsn': forms.TextInput(attrs={'class': 'form-control'}),
             'username' : forms.TextInput(attrs={'class':'form-control'}),
             #'password': forms.HiddenInput,
             'email' : forms.TextInput(attrs={'class':'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
             'nickname' : forms.TextInput(attrs={'class':'form-control'}),
             'sex' : forms.RadioSelect(choices=((u'男', u'男'),(u'女', u'女')),attrs={'class':'list-inline'}),
             'role' : forms.Select(choices=[(x.name,x.name) for x in RoleList.objects.all()],attrs={'class':'form-control'}),
@@ -120,10 +131,15 @@ class EditUserForm(forms.ModelForm):
 
     def __init__(self,*args,**kwargs):
         super(EditUserForm,self).__init__(*args,**kwargs)
+        self.fields['is_staff'].label = u'内部员工'
+        self.fields['personsn'].label = u'标 识'
+        self.fields['personsn'].error_messages = {'required': u'请输入标识'}
         self.fields['username'].label=u'账 号'
         self.fields['username'].error_messages={'required':u'请输入账号'}
         self.fields['email'].label=u'邮 箱'
         self.fields['email'].error_messages={'required':u'请输入邮箱','invalid':u'请输入有效邮箱'}
+        self.fields['phone'].label = u'手 机'
+        self.fields['phone'].error_messages = {'required': u'请输入手机', 'invalid': u'请输入有效手机'}
         self.fields['nickname'].label=u'姓 名'
         self.fields['nickname'].error_messages={'required':u'请输入姓名'}
         self.fields['sex'].label=u'性 别'

@@ -6,4 +6,5 @@ urlpatterns = patterns('MonitorManage.views',
     url(r'^historydata/$', 'monitor.HistoryData', name='historydataurl'),
 
     url(r'^report/$', 'monitor.ReportRoomStatus', name='reportroomstatusurl'),
+    url(r'^dowarning/$', 'monitor.DoWarning', name='dowarningurl'),
 )

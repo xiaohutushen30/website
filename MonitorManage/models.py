@@ -14,8 +14,3 @@ class RoomStatus(models.Model):
     optiontime = models.DateTimeField(null=True, blank=True)
     is_warning = models.BooleanField(default=False)
 
-class UserTemporary(models.Model):
-    roomsn = models.CharField(max_length=64, unique=True, db_index=True)
-
-class RoomTemporary(models.Model):
-    personsn = models.CharField(max_length=64, unique=True, db_index=True)
