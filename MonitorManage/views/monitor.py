@@ -19,8 +19,10 @@ from RoomManage.models import Room,RoomTemporary
 
 @login_required
 @PermissionVerify()
-def ListRoomStatus(request):
-    mList = RoomStatus.objects.all()
+def ListRoomStatus(request, SN):
+    print SN
+    room = Room.objects.get(roomsn=SN)
+    mList = RoomStatus.objects.filter(room_id = room.id)
 
     #分页功能
     lst = SelfPaginator(request,mList, 20)
@@ -28,6 +30,7 @@ def ListRoomStatus(request):
     kwvars = {
         'lPage':lst,
         'request':request,
+        'SN':SN,
     }
 
     return render_to_response('MonitorManage/monitor.list.html',kwvars,RequestContext(request))
@@ -35,13 +38,18 @@ def ListRoomStatus(request):
 
 @login_required
 @PermissionVerify()
-def HistoryStatus(request):
-    return render_to_response('MonitorManage/monitor.history.html',RequestContext(request))
+def HistoryStatus(request, SN):
+    kwvars = {
+        'request':request,
+        'SN':SN,
+    }
+    return render_to_response('MonitorManage/monitor.history.html',kwvars,RequestContext(request))
 
 @login_required
 @PermissionVerify()
-def HistoryData(request):
-    mList = RoomStatus.objects.all()
+def HistoryData(request, SN):
+    room = Room.objects.get(roomsn=SN)
+    mList = RoomStatus.objects.filter(room_id = room.id)
     datas = []
     for info in mList:
         data = []
@@ -93,17 +101,14 @@ def ReportRoomStatus(request):
 
 @login_required
 @PermissionVerify()
-def DoWarning(request):
+def DoWarning(request, SN):
     chat_client = ChatClient()
-    chat_client.do_connect()
-    # chat_client.do_name("jsdfjasdhfjshfshakjhfasljhaslf")
-    chat_client.sock.send("464B04211FFFF7F01FFFF7E8")
-    msg = None
-    while not msg:
-        try:
-            msg = chat_client.sock.recv(1024) #新建对象
-            print msg
-        except socket.timeout:
-            pass
+    chat_client.do_connect(timeout=5)
+    protocol = "464B0421" + SN
+    chat_client.sock.send(protocol)
+    try:
+        msg = chat_client.sock.recv(1024) #新建对象
+    except socket.timeout:
+        msg = "connect timeout"
     chat_client.sock.close()
-    return HttpResponse("ok")
+    return HttpResponse(msg)

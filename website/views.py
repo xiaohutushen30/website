@@ -9,7 +9,7 @@ from RoomManage.models import Room
 
 @login_required
 def Home(request):
-    return render_to_response('home.html',{"all_room":all_room},RequestContext(request))
+    return render_to_response('home.html',locals(),RequestContext(request))
 
 def About(request):
     all_room = Room.objects.all()

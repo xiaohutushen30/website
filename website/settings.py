@@ -51,7 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'django.middleware.security.SecurityMiddleware',
-    'website.common.AddGlobalObjectMiddleWare.AddGlobalObjectMiddleWare'
+    'website.common.MyMiddleWare.CleanTemporaryTable',
 )
 
 ROOT_URLCONF = 'website.urls'
@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'website.common.AddGlobalObject.GlobalContent',
             ],
         },
     },

@@ -8,9 +8,9 @@
     <div class="btn-toolbar">
         <div class="btn-group">
             {% url "listroomstatusurl" as thelistroomstatusurl %}
-            <a class="btn btn-default {%if request.path = thelistroomstatusurl%} active {%endif%}" href={{ thelistroomstatusurl }}><span class="glyphicon glyphicon-edit"></span>实时信息</a>
+            <a class="btn btn-default {%if 'list' in request.path%} active {%endif%}" href={% url "listroomstatusurl" SN=SN %}><span class="glyphicon glyphicon-edit"></span>实时信息</a>
             {% url "historystatusurl" as thehistorystatusurl %}
-            <a class="btn btn-default {%if request.path = thehistorystatusurl%} active {%endif%}" href={{ thehistorystatusurl }}><span class="glyphicon glyphicon-list"></span>历史信息</a>
+            <a class="btn btn-default {%if 'history' in request.path%} active {%endif%}" href={% url "historystatusurl" SN=SN %}><span class="glyphicon glyphicon-list"></span>历史信息</a>
         </div>
     </div>
 
@@ -21,7 +21,7 @@
             var myChart = echarts.init(document.getElementById('main'));
             $.ajax({ 
                 type : "get", 
-                url : "/monitor/historydata", 
+                url : "/monitor/historydata/" + "{{ SN }}" + "/", 
                 data : "", 
                 async : false, 
                 success : function(data){ 

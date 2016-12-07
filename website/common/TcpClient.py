@@ -10,11 +10,11 @@ class ChatClient(cmd.Cmd):
         self.sock = ''
         self.name = ''
         
-    def do_connect(self):#连接到server
+    def do_connect(self,timeout = 1):#连接到server
         s = socket.socket()
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.connect((self.host, self.port))
-        s.settimeout(0.1)#设置超时时间 0.1 秒
+        s.settimeout(timeout)#设置超时时间 0.1 秒
         self.sock = s
        
     def do_EOF(self):#退出

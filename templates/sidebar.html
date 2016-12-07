@@ -10,21 +10,11 @@
                             <table class="table">
                                 <tbody>
 
-                                    {% for room in all_room %}
+                                    {% for room in rooms %}
                                         <tr><td>
-                                            <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroomstatusurl" %}>{{ room.name }}</a>
+                                            <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroomstatusurl" SN=room.roomsn %}>{{ room.name }}</a>
                                         </td></tr>
                                     {% endfor %}
-<!--                                     <tr>
-                                        <td>
-                                            <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroomstatusurl" %}>机房1</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroomstatusurl" %}>机房2</a>
-                                        </td>
-                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
