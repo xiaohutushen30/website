@@ -70,7 +70,7 @@ def ReportRoomStatus(request):
     user_obj = User.objects.filter(personsn=person_info)
     room_obj = Room.objects.filter(roomsn=sn)
     if user_obj and room_obj:
-        if status == "1":
+        if status == "0":
             optiont_status = True
         else:
             optiont_status = False
