@@ -76,8 +76,8 @@ def ReportRoomStatus(request):
             optiont_status = False
         try:
             crs = RoomStatus(
-                room = room_obj,
-                person = user_obj,
+                room = room_obj[0],
+                person = user_obj[0],
                 status = optiont_status,
                 personnumber = person_num,
                 optiontime = date,
