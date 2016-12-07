@@ -69,20 +69,14 @@ def ReportRoomStatus(request):
     date = req_model.get('date')
     user_obj = User.objects.filter(personsn=person_info)
     room_obj = Room.objects.filter(roomsn=sn)
+    import pdb;pdb.set_trace()
     if user_obj and room_obj:
         if status == "1":
             optiont_status = True
         else:
             optiont_status = False
         try:
-            crs = RoomStatus(
-                room = room_obj,
-                person = user_obj,
-                status = optiont_status,
-                personnumber = person_num,
-                optiontime = date,
-                is_warning = False,
-            )
+            crs = RoomStatus(room = room_obj, person = user_obj, status = optiont_status, personnumber = person_num, optiontime = date,is_warning = False,)
             crs.save()
             msg = "ok"
         except Exception, e:

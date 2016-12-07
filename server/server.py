@@ -19,7 +19,7 @@ class ChatServer():
         ''' 用select监听socket'''
         s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)#默认ip tcp、协议
         s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)#地址复用
-        s.bind(('localhost',10001))
+        s.bind(('192.168.1.101',49999))
         s.listen(1)
         self.inputs.append(s)#将s加入到监听的列表 
         self.listen_fd = s#将要监听的文件描述符覆给listen_fd
@@ -144,13 +144,20 @@ class ChatServer():
         minute = int(date_list[4])
         second = int(date_list[5])
         week = int(date_list[6])
-
-        msg = "464B" + "02" + "xx" + sn + hex(year)[2:].upper() + hex(month)[2:].upper() + hex(day)[2:].upper() + \
-        hex(week)[2:].upper() + hex(hour)[2:].upper() + hex(minute)[2:].upper() + hex(second)[2:].upper()
+        #import pdb;pdb.set_trace()
+        print year,month,day,hour,minute,second,week
+        msg = "464B" + "02" + "xx" + sn + self.process_hex(year) + self.process_hex(month) + self.process_hex(day) + \
+        self.process_hex(week) + self.process_hex(hour) + self.process_hex(minute) + self.process_hex(second)
         lenth = len(msg)
-        msg = msg.replace("xx",hex(lenth)[2:].upper())  
+        msg = msg.replace("xx",self.process_hex(lenth/2))  
         self.dict_msg[ts].put(msg)
         return
+
+    def process_hex(self, num):
+        hex_num = hex(num)[2:].upper()
+        if len(hex_num) == 1:
+            hex_num = "0"+hex_num
+        return hex_num
 
     def process_data(self,ts='',device_sn='',data=''):
         sn = device_sn
