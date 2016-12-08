@@ -13,7 +13,7 @@
             <a class="btn btn-default {%if 'history' in request.path%} active {%endif%}" href={% url "historystatusurl" SN=SN %}><span class="glyphicon glyphicon-list"></span>历史信息</a>
         </div>
         <div class="btn-group" style="float:right;padding-right:40px;">
-            <a class="btn btn-default btn-danger" href={% url "dowarningurl" SN=SN %}>手动报警</a>
+            <a id="alink" class="btn btn-default btn-danger" onClick="doWarning()"href="javascript:void(0);">手动报警</a>
         </div>
     </div>
 
@@ -51,6 +51,14 @@
         {% endfor %}
 
     </table>
+    <div class="modal fade" id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+    <script type="text/javascript">
+        function doWarning(){
+            $("#myModal").empty();
+            my_ajax("{% url "dowarningurl" SN=SN %}","#myModal","post")
+            $('#myModal').modal()
+        };
+    </script>
 
     {% include "common/paginator.html" %}
 {% endblock %}

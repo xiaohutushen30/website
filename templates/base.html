@@ -10,7 +10,26 @@
         <script src="/static/js/jquery-1.11.0.min.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>
         <script src="/static/js/echarts.js"></script>
-        
+        <script type="text/javascript">
+            function my_ajax(_url, _tag, _way, _form)
+            {
+                var m = (typeof(_way)  ==  "undefined" ? "GET" :_way );
+                var par = (typeof(_form)  ==  "undefined" ? "" :$(_form).serialize());
+                $.ajax({
+                        type:m,
+                        url:_url,
+                        data:par,
+                        async: false,
+                        error: function(request) {
+                        alert("Connection error");
+                    },
+                    success: function(data) {
+                        $(_tag).html(data);
+                      }
+                    });
+                    return false;
+                }
+        </script>
         {% block head %}{% endblock %}
         <style type="text/css">
             body {

@@ -111,9 +111,12 @@ def DoWarning(request, SN):
     try:
         msg = chat_client.sock.recv(1024) #新建对象
     except socket.timeout:
-        msg = "connect timeout"
+        msg = "timeout"
     chat_client.sock.close()
-    return HttpResponse(msg)
+    # return HttpResponse(msg)
+    status_dict = {"success":u"手动报警成功","failure":u"手动报警失败","unknown":u"未知错误","timeout":"接收消息超时"}
+    content = status_dict[msg]
+    return render_to_response('modal.large.html',{"title":u"提示","content":content},RequestContext(request))
 
 def process_hex(num):
     hex_num = hex(num)[2:].upper()
