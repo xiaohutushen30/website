@@ -103,7 +103,7 @@ def ReportRoomStatus(request):
 @PermissionVerify()
 def DoWarning(request, SN):
     chat_client = ChatClient()
-    chat_client.do_connect(timeout=2)
+    chat_client.do_connect(timeout=5)
     protocol = "464B04XX" + SN
     protocol_len = len(protocol)
     protocol = protocol.replace("XX",process_hex(protocol_len/2))
