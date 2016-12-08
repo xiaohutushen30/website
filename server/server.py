@@ -71,9 +71,9 @@ class ChatServer():
                         self.doWarning(ts,device_sn,msg)
                     elif protocol_stype == "05":
                         answer_status = msg[24:26]
-                        if answer_status == "00":
+                        if answer_status == "01":
                             msg = "success"
-                        elif answer_status == "01":
+                        elif answer_status == "00":
                             msg = "failure"
                         else:
                             msg = "unknown"
