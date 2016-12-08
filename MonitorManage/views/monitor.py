@@ -70,7 +70,7 @@ def ReportRoomStatus(request):
     user_obj = User.objects.filter(personsn=person_info)
     room_obj = Room.objects.filter(roomsn=sn)
     if user_obj and room_obj:
-        if status == "1":
+        if status == "0":
             optiont_status = True
         else:
             optiont_status = False
@@ -103,8 +103,10 @@ def ReportRoomStatus(request):
 @PermissionVerify()
 def DoWarning(request, SN):
     chat_client = ChatClient()
-    chat_client.do_connect(timeout=5)
-    protocol = "464B0421" + SN
+    chat_client.do_connect(timeout=2)
+    protocol = "464B04XX" + SN
+    protocol_len = len(protocol)
+    protocol = protocol.replace("xx",process_hex(protocol_len/2))
     chat_client.sock.send(protocol)
     try:
         msg = chat_client.sock.recv(1024) #新建对象
@@ -112,3 +114,9 @@ def DoWarning(request, SN):
         msg = "connect timeout"
     chat_client.sock.close()
     return HttpResponse(msg)
+
+def process_hex(num):
+    hex_num = hex(num)[2:].upper()
+    if len(hex_num) == 1:
+        hex_num = "0"+hex_num
+    return hex_num
