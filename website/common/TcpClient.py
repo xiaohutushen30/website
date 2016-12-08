@@ -3,9 +3,9 @@ import cmd, socket, traceback, threading, time
 import sys
 class ChatClient(cmd.Cmd):
     ''' chat client '''
-    def __init__(self, host='192.168.1.101', port=49999):
+    def __init__(self, host='127.0.0.1', port=49999):
         cmd.Cmd.__init__(self)
-        self.host = host
+        self.host = socket.gethostbyname(socket.gethostname())
         self.port = port
         self.sock = ''
         self.name = ''

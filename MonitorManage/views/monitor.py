@@ -106,7 +106,7 @@ def DoWarning(request, SN):
     chat_client.do_connect(timeout=2)
     protocol = "464B04XX" + SN
     protocol_len = len(protocol)
-    protocol = protocol.replace("xx",process_hex(protocol_len/2))
+    protocol = protocol.replace("XX",process_hex(protocol_len/2))
     chat_client.sock.send(protocol)
     try:
         msg = chat_client.sock.recv(1024) #新建对象
