@@ -19,7 +19,9 @@ class ChatServer():
         ''' 用select监听socket'''
         s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)#默认ip tcp、协议
         s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)#地址复用
-        s.bind(('192.168.1.101',49999))
+        local_ip = socket.gethostbyname(socket.gethostname())
+        s.bind((local_ip,49999))
+        print "local ip:",local_ip
         s.listen(1)
         self.inputs.append(s)#将s加入到监听的列表 
         self.listen_fd = s#将要监听的文件描述符覆给listen_fd
