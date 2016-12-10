@@ -18,31 +18,20 @@
 
     <table class="table table-hover table-striped  table-bordered table-condensed">
         <tr>
-            <th>内部员工</th>
-            <th>标识</th>
             <th>账号</th>
             <th>姓名</th>
             <th>性别</th>
             <th>Email</th>
             <th>手机</th>
             <th>状态</th>
-            <th>角色</th>
             <th>最后登录时间</th>
             <th>操作</th>
         </tr>
 
             {% for i in lPage %}
                 <tr style="font-size: 13px;">
-                    <td>
-                        {% if i.is_staff %}
-                            <span class="label label-success">是</span>
-                        {% else %}
-                            <span class="label label-default">否</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ i.personsn }}</td>
                     <td>{{ i.username }}</td>
-                    <td>{{ i.nickname|default:"----" }}</td>
+                    <td>{{ i.nickname }}</td>
                     <td>{{ i.sex|default:"----" }}</td>
                     <td>{{ i.email }}</td>
                     <td>{{ i.phone|default:"" }}</td>
@@ -53,7 +42,6 @@
                             <span class="label label-default">禁用</span>
                         {% endif %}
                     </td>
-                    <td>{{ i.role|default:"----" }}</td>
                     <td>{{ i.last_login|date:"Y-m-d H:i:s" }}</td>
                     <td class="host_buttom">
                         <a class="btn btn-warning btn-xs"  href={% url "edituserurl" i.id %} onclick="return confirm('是否确认编辑？')">编辑</a>

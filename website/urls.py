@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^about/$',About),
 
     url(r'^accounts/',include('UserManage.urls' )),
+    url(r'^vistor/',include('VisitorManage.urls' )),
     url(r'^room/',include('RoomManage.urls' )),
     url(r'^monitor/',include('MonitorManage.urls' )),
     #static

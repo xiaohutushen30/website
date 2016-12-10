@@ -51,7 +51,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(max_length=255)
     phone = models.CharField(max_length=20, null=True)
     is_active = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=True)
     nickname = models.CharField(max_length=64, null=True)
     sex = models.CharField(max_length=2, null=True)
     role = models.ForeignKey(RoleList,null=True,blank=True)
@@ -63,6 +63,3 @@ class User(AbstractBaseUser):
     def has_perm(self,perm,obj=None):
         if self.is_active and self.is_superuser:
             return True
-
-class UserTemporary(models.Model):
-    personsn = models.CharField(max_length=64, unique=True, db_index=True)

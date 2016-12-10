@@ -14,7 +14,7 @@ from UserManage.views.permission import PermissionVerify
 
 from MonitorManage.forms import ListRoomStatusForm
 from MonitorManage.models import RoomStatus
-from UserManage.models import User,UserTemporary
+from VisitorManage.models import Visitor,VisitorTemporary
 from RoomManage.models import Room,RoomTemporary
 
 @login_required
@@ -67,7 +67,7 @@ def ReportRoomStatus(request):
     person_info = req_model.get('person_info')
     status = req_model.get('status')
     date = req_model.get('date')
-    user_obj = User.objects.filter(personsn=person_info)
+    user_obj = Visitor.objects.filter(personsn=person_info)
     room_obj = Room.objects.filter(roomsn=sn)
     if user_obj and room_obj:
         if status == "0":
@@ -89,11 +89,11 @@ def ReportRoomStatus(request):
             msg = "failed"
     if (not user_obj) or (not room_obj):
         msg = "user not add or room not add!"
-        person_obj, p_created = UserTemporary.objects.get_or_create(personsn=person_info)
+        person_obj, p_created = VisitorTemporary.objects.get_or_create(personsn=person_info)
         compt_room_obj, c_created = RoomTemporary.objects.get_or_create(roomsn=sn)
     if not user_obj:
         msg = "user not add!"
-        person_obj, p_created = UserTemporary.objects.get_or_create(personsn=person_info)
+        person_obj, p_created = VisitorTemporary.objects.get_or_create(personsn=person_info)
     if not room_obj:
         msg = "room not add!"
         compt_room_obj, c_created = RoomTemporary.objects.get_or_create(roomsn=sn)

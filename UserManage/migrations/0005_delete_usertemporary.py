@@ -7,13 +7,10 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('MonitorManage', '0002_auto_20161206_0018'),
+        ('UserManage', '0004_usertemporary'),
     ]
 
     operations = [
-        migrations.DeleteModel(
-            name='RoomTemporary',
-        ),
         migrations.DeleteModel(
             name='UserTemporary',
         ),

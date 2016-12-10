@@ -36,8 +36,9 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href={% url "editroomurl" i.id %} onclick="return confirm('确认编辑机房吗？？')"><span class="glyphicon glyphicon-edit btn-xs"></span></a>
-                    <a href={% url "deleteroomurl" i.id %} onclick="return confirm('确认删除机房吗？？')"><span class="glyphicon glyphicon-trash btn-xs"></span></a>
+                    <a class="btn btn-warning btn-xs" href={% url "editroomurl" i.id %} onclick="return confirm('确认编辑机房吗？？')">编辑</a>
+                    <a class="btn btn-danger btn-xs" href={% url "deleteroomurl" i.id %} onclick="return confirm('确认删除机房吗？？')">删除</a>
+                    <a class="btn btn-primary btn-xs" href="#" onclick="">报警设置</a>
                 </td>
             </tr>
         {% endfor %}
