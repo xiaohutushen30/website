@@ -58,7 +58,29 @@
             my_ajax("{% url "dowarningurl" SN=SN %}","#myModal","post")
             $('#myModal').modal()
         };
+        function display() { 
+            ws=new WebSocket("ws://{{  websocket_url }}/"); 
+            //监听消息
+            ws.onmessage = function(event) { 
+                //valueLabel.innerHTML+ = event.data; 
+                //log(event.data);
+                window.location.reload(); 
+            }; 
+            // 打开WebSocket 
+            ws.onclose = function(event) { 
+              //WebSocket Status:: Socket Closed
+            }; 
+            // 打开WebSocket
+            ws.onopen = function(event) { 
+               //WebSocket Status:: Socket Open
+                //// 发送一个初始化消息
+                ws.send("Hello, Server!"); 
+            }; 
+            ws.onerror =function(event){
+                //WebSocket Status:: Error was reported
+            };
+        };
+        display();
     </script>
-
     {% include "common/paginator.html" %}
 {% endblock %}

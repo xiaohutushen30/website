@@ -5,8 +5,11 @@ import select
 import traceback
 import time
 import requests
+from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
+import threading
 
-class ChatServer():
+clients = []
+class TCPServer():
     api_url = "http://127.0.0.1:8000/monitor/report/"
     def __init__(self):
         self.dict_name = {}#客户端和设备对应
@@ -186,9 +189,40 @@ class ChatServer():
             self.dict_msg[ts].put(re.text)
         else:
             self.dict_msg[ts].put(str(re.status_code))
+        if clients:
+            for client in clients:
+                client.sendMessage(unicode("notice"))
         self.dict_msg[ts].put(str("ok"))
 
-           
+class SimpleChat(WebSocket):
+
+    def handleMessage(self):
+        for client in clients:
+            if client != self:
+                client.sendMessage(self.address[0] + u' - ' + self.data)
+
+    def handleConnected(self):
+        print self.address, 'connected'
+        for client in clients:
+            client.sendMessage(self.address[0] + u' - connected')
+        clients.append(self)
+
+    def handleClose(self):
+        clients.remove(self)
+        print self.address, 'closed'
+        for client in clients:
+            client.sendMessage(self.address[0] + u' - disconnected')
+
+
 if __name__=='__main__':
-    cs = ChatServer()
-    cs.run()
+    server1 = SimpleWebSocketServer('', 8088, SimpleChat)
+    web_server = threading.Thread(target=server1.serveforever)
+    server2 = TCPServer()
+    tcp_server = threading.Thread(target=server2.run)
+    threads = [web_server,tcp_server]
+    for t in threads:
+        t.setDaemon(True)
+        t.start()
+    for t in threads:
+        t.join()
+    
