@@ -7,6 +7,17 @@ import time
 import requests
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 import threading
+import binascii
+
+def str2hex(oldstr):
+    hexstr = binascii.b2a_hex(oldstr.encode("utf8"))
+    hexstr = hexstr.upper()
+    return hexstr
+
+def hex2str(oldhex):
+    rstr = binascii.a2b_hex(oldhex).decode("utf8")
+    rstr = rstr.upper()
+    return rstr
 
 clients = []
 class TCPServer():
@@ -54,13 +65,13 @@ class TCPServer():
             try:
                 msg = ts.recv(1024) #select检查到有数据时 除了连接就是接收数据
                 if msg:#如果有数据
+                    import pdb;pdb.set_trace()
+                    msg = hex2str(msg)
                     print 'read[%s]'%msg
                     protocol_header = msg[0:4]
                     protocol_stype = msg[4:6]
                     date_lenth = msg[6:8]
                     device_sn = msg[8:24]
-                    # cmd,tmp = msg.split(None,1)#以一个空值分离一次 客户端cmd 的命令和数据
-                    # print 'split[%s][%s]'%(cmd,tmp) 
                     if protocol_header != "464B":
                         print "protocol_header error"
                         continue
@@ -96,6 +107,7 @@ class TCPServer():
                 if not self.dict_msg[ts].empty():
                     msg = self.dict_msg[ts].get_nowait()#不等待，没有数据则直接引发异常
                     if msg:
+                        msg = hex2str(msg)
                         ts.send(msg)
                     print 'write',ts.fileno(),len(msg)
             except:
