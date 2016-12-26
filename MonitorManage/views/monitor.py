@@ -68,29 +68,36 @@ def ReportRoomStatus(request):
     person_info = req_model.get('person_info')
     status = req_model.get('status')
     date = req_model.get('date')
-    user_obj = Visitor.objects.filter(personsn=person_info)
+    is_add = True
+    for person in person_info.split(","):
+        user_obj = Visitor.objects.filter(personsn=person)
+        if not user_obj:
+            is_add = False
+            print "Visitor %s not add"%person
     room_obj = Room.objects.filter(roomsn=sn)
-    if user_obj and room_obj:
+    if is_add and room_obj:
         if status == "0":
             optiont_status = True
         else:
             optiont_status = False
         try:
-            crs = RoomStatus(
-                room = room_obj[0],
-                person = user_obj[0],
-                status = optiont_status,
-                personnumber = person_num,
-                optiontime = date,
-                is_warning = False,
-            )
-            crs.save()
+            for person in person_info.split(","):
+                user_obj = Visitor.objects.filter(personsn=person)
+                crs = RoomStatus(
+                    room = room_obj[0],
+                    person = user_obj[0],
+                    status = optiont_status,
+                    personnumber = person_num,
+                    optiontime = date,
+                    is_warning = False,
+                )
+                crs.save()
+                print crs.id
             msg = "ok"
-            print crs.id
         except Exception, e:
             msg = "failed"
             print "failed"
-    if not user_obj:
+    if not is_add:
         msg = "user not add!"
         for person in person_info.split(","):
             person_obj, p_created = VisitorTemporary.objects.get_or_create(personsn=person)

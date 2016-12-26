@@ -137,10 +137,8 @@ class TCPServer():
         }
         re = requests.post(url=self.addroomurl, data=http_data)
         if re.status_code == 200:
-            #self.dict_msg[ts].put(re.text)
             print "room option ok"
         else:
-            #self.dict_msg[ts].put(str(re.status_code))
             print "room option failed %s" % str(re.status_code)
 
     def doAnswer(self,ts='',msg=''):
