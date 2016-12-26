@@ -5,4 +5,5 @@ urlpatterns = patterns('RoomManage.views',
     url(r'^room/list/$', 'room.ListRoom', name='listroomurl'),
     url(r'^room/edit/(?P<ID>\d+)/$', 'room.EditRoom', name='editroomurl'),
     url(r'^room/delete/(?P<ID>\d+)/$', 'room.DeleteRoom', name='deleteroomurl'),
+    url(r'^room/addroomapi/$', 'room.AddRoomAPI', name='addroomapi'),
 )

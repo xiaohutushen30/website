@@ -72,3 +72,20 @@ def DeleteRoom(request,ID):
     Room.objects.filter(id = ID).delete()
 
     return HttpResponseRedirect(reverse('listroomurl'))
+
+def AddRoomAPI(request):
+    method = request.method
+    exec("req_model = request." + method)
+    sn = req_model.get('sn')
+    roomsn = req_model.get('roomsn')
+    name = req_model.get('name')
+    is_active = False
+    is_add = True
+    room_obj = Room.objects.filter(roomsn=roomsn)
+    if not room_obj:
+        room = Room(roomsn=roomsn,name=name,is_active=is_active,is_add=is_add)
+        room.save()
+        print "add room %s" % roomsn
+    else:
+        print "room %s is exists" % roomsn
+    return HttpResponse("ok")

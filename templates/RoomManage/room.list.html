@@ -12,9 +12,6 @@
             {% url "listroomurl" as thelistroomurl %}
             <a class="btn btn-default {%if request.path = thelistroomurl%} active {%endif%}" href={{ thelistroomurl }}><span class="glyphicon glyphicon-list"></span>机房列表</a>
         </div>
-        <div class="btn-group" style="float:right;padding-right:40px;">
-            <a id="alink" class="btn btn-default btn-primary" onClick=""href="javascript:void(0);">导入机房</a>
-        </div>
     </div>
 
     <hr/>

@@ -3,6 +3,7 @@
 #update:2014-09-12 by liufeily@163.com
 import json
 import socket
+import binascii
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse,HttpResponseRedirect
@@ -85,15 +86,14 @@ def ReportRoomStatus(request):
             )
             crs.save()
             msg = "ok"
+            print crs.id
         except Exception, e:
             msg = "failed"
-    if (not user_obj) or (not room_obj):
-        msg = "user not add or room not add!"
-        person_obj, p_created = VisitorTemporary.objects.get_or_create(personsn=person_info)
-        compt_room_obj, c_created = RoomTemporary.objects.get_or_create(roomsn=sn)
+            print "failed"
     if not user_obj:
         msg = "user not add!"
-        person_obj, p_created = VisitorTemporary.objects.get_or_create(personsn=person_info)
+        for person in person_info.split(","):
+            person_obj, p_created = VisitorTemporary.objects.get_or_create(personsn=person)
     if not room_obj:
         msg = "room not add!"
         compt_room_obj, c_created = RoomTemporary.objects.get_or_create(roomsn=sn)
@@ -107,6 +107,7 @@ def DoWarning(request, SN):
     protocol = "464B04XX" + SN
     protocol_len = len(protocol)
     protocol = protocol.replace("XX",process_hex(protocol_len/2))
+    protocol = binascii.a2b_hex(protocol)
     chat_client.sock.send(protocol)
     try:
         msg = chat_client.sock.recv(1024) #新建对象

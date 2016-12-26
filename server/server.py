@@ -9,19 +9,10 @@ from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 import threading
 import binascii
 
-def str2hex(oldstr):
-    hexstr = binascii.b2a_hex(oldstr.encode("utf8"))
-    hexstr = hexstr.upper()
-    return hexstr
-
-def hex2str(oldhex):
-    rstr = binascii.a2b_hex(oldhex).decode("utf8")
-    rstr = rstr.upper()
-    return rstr
-
 clients = []
 class TCPServer():
     api_url = "http://127.0.0.1:8000/monitor/report/"
+    addroomurl = "http://127.0.0.1:8000/room/room/addroomapi/"
     def __init__(self):
         self.dict_name = {}#客户端和设备对应
         self.dict_msg = {}#客户端和消息队列对应
@@ -29,6 +20,7 @@ class TCPServer():
         self.inputs = []#可读状态列表
         self.outputs = []#可写状态列表
         self.device_web_map = {}#客户端和web客户端对应列表
+
     def run(self):
         ''' 用select监听socket'''
         s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)#默认ip tcp、协议
@@ -63,17 +55,25 @@ class TCPServer():
         for ts in list_r:
             if ts is self.listen_fd:continue#如果是监听的socket 就继续
             try:
-                msg = ts.recv(1024) #select检查到有数据时 除了连接就是接收数据
+                try:
+                    msg = ts.recv(1024) #select检查到有数据时 除了连接就是接收数据
+                except:
+                    self.doExcept([ts])
+                    msg = None
                 if msg:#如果有数据
-                    import pdb;pdb.set_trace()
-                    msg = hex2str(msg)
-                    print 'read[%s]'%msg
+                    print "rec %s"%msg
+                    msg = binascii.b2a_hex(msg).upper()
+                    print 'read[%s]' % msg
                     protocol_header = msg[0:4]
                     protocol_stype = msg[4:6]
-                    date_lenth = msg[6:8]
+                    data_lenth = msg[6:8]
                     device_sn = msg[8:24]
                     if protocol_header != "464B":
                         print "protocol_header error"
+                        continue
+                    real_length = len(msg)/2
+                    if real_length != int(data_lenth,16):
+                        print "protocol length is error"
                         continue
                     if protocol_stype == '00':#链接
                         self.doName(ts,device_sn)
@@ -104,10 +104,13 @@ class TCPServer():
     def doWrite(self,list_w=[]):
         for ts in list_w:
             try:
-                if not self.dict_msg[ts].empty():
+                if not self.dict_msg.get(ts):
+                    list_w.remove(ts)
+                    continue
+                if not self.dict_msg.get(ts).empty():
                     msg = self.dict_msg[ts].get_nowait()#不等待，没有数据则直接引发异常
+                    #msg = binascii.a2b_hex(msg)
                     if msg:
-                        msg = hex2str(msg)
                         ts.send(msg)
                     print 'write',ts.fileno(),len(msg)
             except:
@@ -128,21 +131,36 @@ class TCPServer():
         
     def doName(self,ts='',tmp=''):#ts接收发过的数据 tmp 登陆聊天室
         self.dict_name[ts] = tmp#客户端对应发送的消息聊天人的姓名
+        http_data = {
+            "roomsn":tmp,
+            "name":tmp,
+        }
+        re = requests.post(url=self.addroomurl, data=http_data)
+        if re.status_code == 200:
+            #self.dict_msg[ts].put(re.text)
+            print "room option ok"
+        else:
+            #self.dict_msg[ts].put(str(re.status_code))
+            print "room option failed %s" % str(re.status_code)
 
     def doAnswer(self,ts='',msg=''):
         if ts in self.device_web_map:
             web_socket = self.device_web_map[ts]
-            self.dict_msg[web_socket].put(msg)
+            web_socket.send(msg)
         else:
             print "web clinet close"
 
     def doWarning(self,ts='',device_sn='',msg=''):#对某人发
         # user,tmp = msg.split(None,1)
+        #import pdb;pdb.set_trace()
+        #print "device_sn:"%str(device_sn)
         user = device_sn
         tmp = msg
         find_user = 0
         for s in self.dict_name:
           if self.dict_name[s] == user: #当对某人发时取得某人的消息队列
+            tmp = binascii.a2b_hex(tmp)
+            print "send:%s"%tmp
             self.dict_msg[s].put(tmp)#发送用户名 消息 
             self.device_web_map[s] = ts
             find_user = 1
@@ -161,12 +179,12 @@ class TCPServer():
         minute = int(date_list[4])
         second = int(date_list[5])
         week = int(date_list[6])
-        #import pdb;pdb.set_trace()
         print year,month,day,hour,minute,second,week
         msg = "464B" + "02" + "xx" + sn + self.process_hex(year) + self.process_hex(month) + self.process_hex(day) + \
         self.process_hex(week) + self.process_hex(hour) + self.process_hex(minute) + self.process_hex(second)
         lenth = len(msg)
         msg = msg.replace("xx",self.process_hex(lenth/2))  
+        msg = binascii.a2b_hex(msg)
         self.dict_msg[ts].put(msg)
         return
 
@@ -179,15 +197,26 @@ class TCPServer():
     def process_data(self,ts='',device_sn='',data=''):
         sn = device_sn
         person_num = int(data[24:26],16)
-        person_info = data[26:50]
-        status = int(data[50:52],16)
-        year = int(data[52:54],16) + 2000
-        month = int(data[54:56],16)
-        day = int(data[56:58],16)
-        week = int(data[58:60],16)
-        hour = int(data[60:62],16)
-        minute = int(data[62:64],16)
-        second = int(data[64:66])
+        index = 26
+        person_info = []
+        for pnum in xrange(1,person_num+1):
+            person_info.append(data[index:index+24])
+            index = index + 24
+        person_info = ",".join(person_info)
+        status = int(data[index:index+2],16)
+        index += 2
+        year = int(data[index:index+2],16) + 2000
+        index += 2
+        month = int(data[index:index+2],16)
+        day = int(data[index:index+2],16)
+        index += 2
+        week = int(data[index:index+2],16)
+        index += 2
+        hour = int(data[index:index+2],16)
+        index += 2
+        minute = int(data[index:index+2],16)
+        index += 2
+        second = int(data[index:index+2],16)
         date = "%s-%s-%s %s:%s:%s" % (year,month,day,hour,minute,second)
         http_data = {
             "sn":sn,
@@ -198,13 +227,16 @@ class TCPServer():
         }
         re = requests.post(url=self.api_url, data=http_data)
         if re.status_code == 200:
-            self.dict_msg[ts].put(re.text)
+            #self.dict_msg[ts].put(re.text)
+            print "report ok"
         else:
-            self.dict_msg[ts].put(str(re.status_code))
+            #self.dict_msg[ts].put(str(re.status_code))
+            print "report failed %s" % str(re.status_code)
         if clients:
             for client in clients:
                 client.sendMessage(unicode("notice"))
-        self.dict_msg[ts].put(str("ok"))
+        #self.dict_msg[ts].put(str("ok"))
+        #print "report ok"
 
 class SimpleChat(WebSocket):
 
