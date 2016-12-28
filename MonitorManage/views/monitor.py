@@ -61,12 +61,13 @@ def HistoryData(request, SN):
     return HttpResponse(result_data)
 
 def ReportRoomStatus(request):
+    import pdb;pdb.set_trace()
     method = request.method
     exec("req_model = request." + method)
     sn = req_model.get('sn')
     person_num = req_model.get('person_num')
     person_info = req_model.get('person_info')
-    status = req_model.get('status')
+    persons_real_num = req_model.get('persons_real_num')
     date = req_model.get('date')
     is_add = True
     for person in person_info.split(","):
@@ -76,10 +77,6 @@ def ReportRoomStatus(request):
             print "Visitor %s not add"%person
     room_obj = Room.objects.filter(roomsn=sn)
     if is_add and room_obj:
-        if status == "0":
-            optiont_status = True
-        else:
-            optiont_status = False
         try:
             for person in person_info.split(","):
                 user_obj = Visitor.objects.filter(personsn=person)

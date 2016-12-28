@@ -8,6 +8,7 @@ import requests
 from SimpleWebSocketServer import SimpleWebSocketServer, WebSocket
 import threading
 import binascii
+import json
 
 clients = []
 class TCPServer():
@@ -195,14 +196,25 @@ class TCPServer():
     def process_data(self,ts='',device_sn='',data=''):
         sn = device_sn
         person_num = int(data[24:26],16)
+        #非人员信息长度20
+        persons_len = len(data) - 20*2
+        #一条人员信息长度13
+        if persons_len % (13*2) != 0:
+            print "persons info is error!"
+            return
+        real_person_num = persons_len / (13*2)
         index = 26
         person_info = []
-        for pnum in xrange(1,person_num+1):
-            person_info.append(data[index:index+24])
-            index = index + 24
-        person_info = ",".join(person_info)
-        status = int(data[index:index+2],16)
-        index += 2
+        for pnum in xrange(1,real_person_num+1):
+            person = {}
+            tmp_person_infos = data[index:index+26]
+            person["info"] = tmp_person_infos[0:24]
+            person["status"] = int(tmp_person_infos[24:],16)
+            person_info.append(person)
+            index = index + 26
+        # person_info = ",".join(person_info)
+        # status = int(data[index:index+2],16)
+        # index += 2
         year = int(data[index:index+2],16) + 2000
         index += 2
         month = int(data[index:index+2],16)
@@ -216,14 +228,16 @@ class TCPServer():
         index += 2
         second = int(data[index:index+2],16)
         date = "%s-%s-%s %s:%s:%s" % (year,month,day,hour,minute,second)
+        import pdb;pdb.set_trace()
         http_data = {
             "sn":sn,
             "person_num":person_num,
+            "persons_real_num":real_person_num,
             "person_info":person_info,
-            "status":status,
+            # "status":status,
             "date":date,
         }
-        re = requests.post(url=self.api_url, data=http_data)
+        re = requests.post(url=self.api_url, data=json.dumps(http_data))
         if re.status_code == 200:
             #self.dict_msg[ts].put(re.text)
             print "report ok"
