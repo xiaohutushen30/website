@@ -61,7 +61,6 @@ def HistoryData(request, SN):
     return HttpResponse(result_data)
 
 def ReportRoomStatus(request):
-    import pdb;pdb.set_trace()
     method = request.method
     exec("req_model = request." + method)
     sn = req_model.get('sn')
@@ -70,21 +69,22 @@ def ReportRoomStatus(request):
     persons_real_num = req_model.get('persons_real_num')
     date = req_model.get('date')
     is_add = True
-    for person in person_info.split(","):
-        user_obj = Visitor.objects.filter(personsn=person)
+    person_list = json.loads(person_info)
+    for person in person_list:
+        user_obj = Visitor.objects.filter(personsn=person["info"])
         if not user_obj:
             is_add = False
             print "Visitor %s not add"%person
     room_obj = Room.objects.filter(roomsn=sn)
     if is_add and room_obj:
         try:
-            for person in person_info.split(","):
-                user_obj = Visitor.objects.filter(personsn=person)
+            for person in person_list:
+                user_obj = Visitor.objects.filter(personsn=person["info"])
                 crs = RoomStatus(
                     room = room_obj[0],
                     person = user_obj[0],
-                    status = optiont_status,
-                    personnumber = person_num,
+                    status = person["status"],
+                    personnumber = 1,
                     optiontime = date,
                     is_warning = False,
                 )
@@ -96,8 +96,8 @@ def ReportRoomStatus(request):
             print "failed"
     if not is_add:
         msg = "user not add!"
-        for person in person_info.split(","):
-            person_obj, p_created = VisitorTemporary.objects.get_or_create(personsn=person)
+        for person in person_list:
+            person_obj, p_created = VisitorTemporary.objects.get_or_create(personsn=person["info"])
     if not room_obj:
         msg = "room not add!"
         compt_room_obj, c_created = RoomTemporary.objects.get_or_create(roomsn=sn)

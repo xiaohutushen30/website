@@ -228,21 +228,18 @@ class TCPServer():
         index += 2
         second = int(data[index:index+2],16)
         date = "%s-%s-%s %s:%s:%s" % (year,month,day,hour,minute,second)
-        import pdb;pdb.set_trace()
+        # import pdb;pdb.set_trace()
         http_data = {
             "sn":sn,
             "person_num":person_num,
             "persons_real_num":real_person_num,
-            "person_info":person_info,
-            # "status":status,
+            "person_info":json.dumps(person_info),
             "date":date,
         }
-        re = requests.post(url=self.api_url, data=json.dumps(http_data))
+        re = requests.post(url=self.api_url, data=http_data)
         if re.status_code == 200:
-            #self.dict_msg[ts].put(re.text)
             print "report ok"
         else:
-            #self.dict_msg[ts].put(str(re.status_code))
             print "report failed %s" % str(re.status_code)
         if clients:
             for client in clients:
