@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-#update:2014-09-25 by liufeily@163.com
+#
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
@@ -24,7 +24,7 @@ def SelfPaginator(request,List,Limit):
         5.模板页引入paginator.html
         ex:{% include "common/paginator.html" %}
     '''
-    Limit = 3
+    # Limit = 3
     paginator = Paginator(List, int(Limit))
 
     page = request.GET.get('page')

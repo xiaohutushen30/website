@@ -11,21 +11,25 @@ app = web.application(urls, globals()) # 绑定url
 # 定义相应类
 class IdCard:
     def GET(self):
+        web.header('Content-Type', 'application/javascript;charset=utf-8')
+        callback = web.input(callback='callback')['callback']
         result = json.dumps(self.get_card_info())
-        return result
+        return "%s(%s)" %(callback,result)
 
     def get_card_info(self):
         info = {
             "id_card":"685425542854669824",
             "name":u"张三",
-            "sex":u"男"
+            "sex":u"女"
         }
         return info
 
 class PersonSN:
     def GET(self):
+        web.header('Content-Type', 'application/javascript;charset=utf-8')
+        callback = web.input(callback='callback')['callback']
         result = json.dumps(self.get_personsn())
-        return result
+        return "%s(%s)" %(callback,result)
 
     def get_personsn(self):
         info = {

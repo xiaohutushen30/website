@@ -24,8 +24,10 @@
                 url : "/monitor/historydata/" + "{{ SN }}" + "/", 
                 data : "", 
                 async : false, 
-                success : function(data){ 
-                    window.data = eval(data);
+                success : function(data){
+                    result_data = eval(data);
+                    window.data_frid = result_data[0];
+                    window.data_ir = result_data[1];
                 } 
             }); 
             // 指定图表的配置项和数据
@@ -36,11 +38,18 @@
                 tooltip: {
                     trigger: 'axis'
                 },
-                xAxis: {
-                    data: window.data.map(function (item) {
-                        return item[0];
-                    })
-                },
+                xAxis: [
+                    {
+                        data: window.data_frid.map(function (item) {
+                            return item[0];
+                        })
+                    },
+                    {
+                        data: window.data_ir.map(function (item) {
+                            return item[0];
+                        })
+                    }
+                ],
                 yAxis: {
                     splitLine: {
                         show: false
@@ -61,13 +70,22 @@
                 }, {
                     type: 'inside'
                 }],
-                series: {
-                    name: '机房出入历史记录',
-                    type: 'line',
-                    data: window.data.map(function (item) {
-                        return item[1];
-                    }),
-                }
+                series: [
+                    {
+                        name: 'FRID人数',
+                        type: 'line',
+                        data: window.data_frid.map(function (item) {
+                            return item[1];
+                        }),
+                    },
+                    {
+                        name: '红外人数',
+                        type: 'line',
+                        data: window.data_ir.map(function (item) {
+                            return item[1];
+                        }),
+                    },
+                ],
             };
             myChart.setOption(option);  
         });

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-#update:2014-09-12 by liufeily@163.com
+#
 
 from django import forms
 from django.contrib import auth

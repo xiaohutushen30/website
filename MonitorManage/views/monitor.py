@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-#update:2014-09-12 by liufeily@163.com
+#
 import json
 import socket
 import binascii
@@ -14,7 +14,7 @@ from website.common.TcpClient import ChatClient
 from UserManage.views.permission import PermissionVerify
 
 from MonitorManage.forms import ListRoomStatusForm
-from MonitorManage.models import RoomStatus
+from MonitorManage.models import RoomStatus, RoomStatusGroup
 from VisitorManage.models import Visitor,VisitorTemporary
 from RoomManage.models import Room,RoomTemporary
 
@@ -50,15 +50,26 @@ def HistoryStatus(request, SN):
 @PermissionVerify()
 def HistoryData(request, SN):
     room = Room.objects.get(roomsn=SN)
-    mList = RoomStatus.objects.filter(room_id = room.id)
-    datas = []
+    mList = RoomStatusGroup.objects.filter(room_id = room.id)
+    datas_frid = []
+    datas_ir = []
+    datas2 = []
+    reult_datas = []
     for info in mList:
-        data = []
-        data.append(info.optiontime.strftime('%Y-%m-%d %H:%M'))
-        data.append(info.personnumber)
-        datas.append(data)
-    result_data = json.dumps(datas)
-    return HttpResponse(result_data)
+        data1 = []
+        data1.append(info.optiontime.strftime('%Y-%m-%d %H:%M'))
+        data1.append(info.frid_personnumber)
+        datas_frid.append(data1)
+        data2 = []
+        data2.append(info.optiontime.strftime('%Y-%m-%d %H:%M'))
+        data2.append(info.ir_personnumber)
+        datas_ir.append(data2)
+    # frid_data = json.dumps(datas_frid)
+    # ir_data = json.dumps(datas_ir)
+    reult_datas.append(datas_frid)
+    reult_datas.append(datas_ir)
+    reult_datas_json = json.dumps(reult_datas)
+    return HttpResponse(reult_datas_json)
 
 def ReportRoomStatus(request):
     method = request.method
@@ -76,20 +87,32 @@ def ReportRoomStatus(request):
             is_add = False
             print "Visitor %s not add"%person
     room_obj = Room.objects.filter(roomsn=sn)
+    
     if is_add and room_obj:
         try:
+            persons = []
             for person in person_list:
                 user_obj = Visitor.objects.filter(personsn=person["info"])
                 crs = RoomStatus(
                     room = room_obj[0],
                     person = user_obj[0],
                     status = person["status"],
-                    personnumber = 1,
+                    # personnumber = 1,
                     optiontime = date,
                     is_warning = False,
                 )
                 crs.save()
+                persons.append(str(user_obj[0].id))
                 print crs.id
+            rsg = RoomStatusGroup(
+                room = room_obj[0],
+                persons = "[" + ",".join(persons) + "]",
+                frid_personnumber = persons_real_num,
+                ir_personnumber = person_num,
+                optiontime = date,
+                is_warning = False,
+            )
+            rsg.save()
             msg = "ok"
         except Exception, e:
             msg = "failed"

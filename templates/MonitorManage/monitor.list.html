@@ -23,7 +23,6 @@
         <tr>
             <th>姓名</th>
             <th>进/出</th>
-            <th>人数</th>
             <th>时间</th>
             <th>是否警告</th>
         </tr>
@@ -38,7 +37,6 @@
                         <span class="label label-default">出</span>
                     {% endif %}
                 </td>
-                <td>{{ i.personnumber }} </td>
                 <td>{{ i.optiontime|date:"Y-m-d H:i:s" }} </td>
                 <td>
                     {% if i.is_warning %}

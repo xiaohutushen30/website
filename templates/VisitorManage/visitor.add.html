@@ -58,28 +58,44 @@
               moveOnSelect: false,
         });
 
-        function ajax_jsonp(url){
+        function get_idcard(url){
             $.ajax({
-                 url:url,
+                 url:"http://127.0.0.1:8080/idcard",
                  dataType:'jsonp',
                  processData: false, 
                  type:'get',
+                 async:false,
                  success:function(data){
-                   alert(data);
+                    $("#id_card").val(data.id_card);
+                    $("#username").val(data.name);
+                    $("input[name='sex'][value='"+data.sex+"']").attr("checked",true);
+
+
                  },
                  error:function(XMLHttpRequest, textStatus, errorThrown) {
                    alert(XMLHttpRequest.status);
                    alert(XMLHttpRequest.readyState);
                    alert(textStatus);
                  }});
-        } 
+        };
 
-        function get_idcard(){
-            ajax_jsonp("http://127.0.0.1:8080/idcard")
-        } 
-        function get_personsn(){
-            ajax_jsonp("http://127.0.0.1:8080/personsn")
-        } 
+        function get_personsn(url){
+            $.ajax({
+                 url:"http://127.0.0.1:8080/personsn",
+                 dataType:'jsonp',
+                 processData: false, 
+                 type:'get',
+                 async:false,
+                 success:function(data){
+                    $("#personsn").val(data.personsn);
+                 },
+                 error:function(XMLHttpRequest, textStatus, errorThrown) {
+                   alert(XMLHttpRequest.status);
+                   alert(XMLHttpRequest.readyState);
+                   alert(textStatus);
+                 }});
+        };
+
     </script>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
-#update:2014-09-12 by liufeily@163.com
+#
 
 from django import forms
 from VisitorManage.models import Visitor,VisitorTemporary
@@ -15,7 +15,7 @@ class AddVisitorForm(forms.ModelForm):
             'username' : forms.TextInput(attrs={'class':'form-control','id':"username"}),
             'id_card' : forms.TextInput(attrs={'class':'form-control',"id":"id_card"}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
-            'sex' : forms.RadioSelect(choices=((u'男', u'男'),(u'女', u'女')),attrs={'class':'list-inline',"id":"sex"}),
+            'sex' : forms.RadioSelect(choices=((u'男', u'男'),(u'女', u'女')),attrs={'class':'list-inline'}),
             # 'is_bind' : forms.Select(choices=((True, u'是'),(False, u'否')),attrs={'class':'form-control'}),
         }
 
