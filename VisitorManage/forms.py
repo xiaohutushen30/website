@@ -8,14 +8,14 @@ from VisitorManage.models import Visitor,VisitorTemporary
 class AddVisitorForm(forms.ModelForm):
     class Meta:
         model = Visitor
-        fields = ('personsn','username','id_card','phone','sex','is_staff')
+        fields = ('personsn','username','id_card','sex','phone','is_staff')
         widgets = {
             'is_staff' : forms.RadioSelect(choices=((u'True', u'内部员工'),(u'False', u'外部员工')),attrs={'class':'list-inline'}),
-            'personsn': forms.TextInput(attrs={'class':'form-control'}),
-            'username' : forms.TextInput(attrs={'class':'form-control'}),
-            'id_card' : forms.TextInput(attrs={'class':'form-control'}),
+            'personsn': forms.TextInput(attrs={'class':'form-control','id':"personsn"}),
+            'username' : forms.TextInput(attrs={'class':'form-control','id':"username"}),
+            'id_card' : forms.TextInput(attrs={'class':'form-control',"id":"id_card"}),
             'phone': forms.TextInput(attrs={'class': 'form-control'}),
-            'sex' : forms.RadioSelect(choices=((u'男', u'男'),(u'女', u'女')),attrs={'class':'list-inline'}),
+            'sex' : forms.RadioSelect(choices=((u'男', u'男'),(u'女', u'女')),attrs={'class':'list-inline',"id":"sex"}),
             # 'is_bind' : forms.Select(choices=((True, u'是'),(False, u'否')),attrs={'class':'form-control'}),
         }
 
@@ -38,7 +38,7 @@ class AddVisitorForm(forms.ModelForm):
 class EditVisitorForm(forms.ModelForm):
     class Meta:
         model = Visitor
-        fields = ('personsn','username','id_card','phone','sex','is_staff')
+        fields = ('personsn','username','id_card','sex','phone','is_staff')
         widgets = {
             'is_staff' : forms.RadioSelect(choices=((u'True', u'内部员工'),(u'False', u'外部员工')),attrs={'class':'list-inline'}),
             'personsn': forms.TextInput(attrs={'class':'form-control'}),

@@ -30,6 +30,12 @@
                 <div class="col-md-2">
                     {{item}}
                 </div>
+                {% if item.label == "标 识" %}
+                    <div><button type="button" onclick="get_personsn()" class="btn btn-sm">获 取</button></div>
+                {% endif %}
+                {% if item.label == "姓 名" %}
+                    <div><button type="button" onclick="get_idcard()" class="btn btn-sm">获 取</button></div>
+                {% endif %}
                 <div class="col-md-offset-1 col-md-10">
                     {{item.errors}}
                 </div>
@@ -51,6 +57,29 @@
               preserveSelectionOnMove: 'moved',
               moveOnSelect: false,
         });
+
+        function ajax_jsonp(url){
+            $.ajax({
+                 url:url,
+                 dataType:'jsonp',
+                 processData: false, 
+                 type:'get',
+                 success:function(data){
+                   alert(data);
+                 },
+                 error:function(XMLHttpRequest, textStatus, errorThrown) {
+                   alert(XMLHttpRequest.status);
+                   alert(XMLHttpRequest.readyState);
+                   alert(textStatus);
+                 }});
+        } 
+
+        function get_idcard(){
+            ajax_jsonp("http://127.0.0.1:8080/idcard")
+        } 
+        function get_personsn(){
+            ajax_jsonp("http://127.0.0.1:8080/personsn")
+        } 
     </script>
 
 {% endblock %}
