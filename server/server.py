@@ -195,15 +195,16 @@ class TCPServer():
 
     def process_data(self,ts='',device_sn='',data=''):
         sn = device_sn
-        frid_person_num = int(data[24:26],16)
+        ir_person_num = int(data[24:26],16)
+        frid_person_num = int(data[26:28],16)
         #非人员信息长度21
         persons_len = len(data) - 21*2
         #一条人员信息长度13
         if persons_len % (13*2) != 0:
             print "persons info is error!"
             return
-        ir_person_num = int(data[-2:],16)
-        index = 26
+        #ir_person_num = int(data[-2:],16)
+        index = 28
         person_info = []
         for pnum in xrange(1,frid_person_num+1):
             person = {}
@@ -218,6 +219,7 @@ class TCPServer():
         year = int(data[index:index+2],16) + 2000
         index += 2
         month = int(data[index:index+2],16)
+        index += 2
         day = int(data[index:index+2],16)
         index += 2
         week = int(data[index:index+2],16)
@@ -228,6 +230,7 @@ class TCPServer():
         index += 2
         second = int(data[index:index+2],16)
         date = "%s-%s-%s %s:%s:%s" % (year,month,day,hour,minute,second)
+        print date
         # import pdb;pdb.set_trace()
         http_data = {
             "sn":sn,

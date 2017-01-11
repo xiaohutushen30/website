@@ -8,9 +8,12 @@
     <div class="btn-toolbar">
         <div class="btn-group">
             {% url "listroomstatusurl" as thelistroomstatusurl %}
-            <a class="btn btn-default {%if 'list' in request.path%} active {%endif%}" href={% url "listroomstatusurl" SN=SN %}><span class="glyphicon glyphicon-edit"></span>实时信息</a>
+            <a class="btn btn-default {%if 'list' in request.path%} active {%endif%}" href={% url "listroomstatusurl" SN=SN %}><span class="glyphicon glyphicon-edit"></span>人员信息</a>
             {% url "historystatusurl" as thehistorystatusurl %}
-            <a class="btn btn-default {%if 'history' in request.path%} active {%endif%}" href={% url "historystatusurl" SN=SN %}><span class="glyphicon glyphicon-list"></span>历史信息</a>
+            <a class="btn btn-default {%if 'history' in request.path%} active {%endif%}" href={% url "historystatusurl" SN=SN %}><span class="glyphicon glyphicon-list"></span>人数信息</a>
+        </div>
+        <div class="btn-group" style="float:right;padding-right:40px;">
+            <a id="alink" class="btn btn-default btn-danger" onClick="doWarning()"href="javascript:void(0);">手动报警</a>
         </div>
     </div>
 
@@ -33,7 +36,7 @@
             // 指定图表的配置项和数据
             var option = {
                 title: {
-                    text: '机房出入历史记录'
+                    text: '机房出入人数记录'
                 },
                 tooltip: {
                     trigger: 'axis'
@@ -89,5 +92,34 @@
             };
             myChart.setOption(option);  
         });
+
+        function doWarning(){
+            $("#myModal").empty();
+            my_ajax("{% url "dowarningurl" SN=SN %}","#myModal","post")
+            $('#myModal').modal()
+        };
+        function display() { 
+            ws=new WebSocket("ws://{{  websocket_url }}/"); 
+            //监听消息
+            ws.onmessage = function(event) { 
+                //valueLabel.innerHTML+ = event.data; 
+                //log(event.data);
+                window.location.reload(); 
+            }; 
+            // 打开WebSocket 
+            ws.onclose = function(event) { 
+              //WebSocket Status:: Socket Closed
+            }; 
+            // 打开WebSocket
+            ws.onopen = function(event) { 
+               //WebSocket Status:: Socket Open
+                //// 发送一个初始化消息
+                ws.send("Hello, Server!"); 
+            }; 
+            ws.onerror =function(event){
+                //WebSocket Status:: Error was reported
+            };
+        };
+        display();
     </script>
 {% endblock %}
