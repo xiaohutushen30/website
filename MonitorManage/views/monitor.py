@@ -57,11 +57,11 @@ def HistoryData(request, SN):
     reult_datas = []
     for info in mList:
         data1 = []
-        data1.append(info.optiontime.strftime('%Y-%m-%d %H:%M'))
+        data1.append(info.optiontime.strftime('%Y-%m-%d %H:%M:%S'))
         data1.append(info.frid_personnumber)
         datas_frid.append(data1)
         data2 = []
-        data2.append(info.optiontime.strftime('%Y-%m-%d %H:%M'))
+        data2.append(info.optiontime.strftime('%Y-%m-%d %H:%M:%S'))
         data2.append(info.ir_personnumber)
         datas_ir.append(data2)
     # frid_data = json.dumps(datas_frid)
@@ -87,7 +87,6 @@ def ReportRoomStatus(request):
             is_add = False
             print "Visitor %s not add"%person
     room_obj = Room.objects.filter(roomsn=sn)
-    
     if is_add and room_obj:
         try:
             persons = []
