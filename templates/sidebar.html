@@ -88,5 +88,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" class="collapsed"><span class="glyphicon glyphicon-list-alt btn-xs"></span>策略管理</a>
+                        </h4>
+                    </div>
+                    <div id="collapseFour" class="panel-collapse collapse {% if 'strategy' in request.path %} in {% endif %}">
+                        <div class="panel-body">
+                            <table class="table">
+                                <tbody><tr>
+                                    <td>
+                                        <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "liststrategyurl" %}>访客管理</a>
+                                    </td>
+                                </tr>
+                            </tbody></table>
+                        </div>
+                    </div>
+                </div>
 
             </div>

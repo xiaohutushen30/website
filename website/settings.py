@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'RoomManage',
     'VisitorManage',
     'MonitorManage',
+    'StrategyManage',
 )
 
 MIDDLEWARE_CLASSES = (
