@@ -81,7 +81,7 @@ def is_warning(rsg):
         for rule in rules:
             class_name = rule.class_name
             class_obj = eval("Rules." + class_name + "()")
-            ret = class_obj.is_worning()
+            ret = class_obj.is_worning(rsg)
             if ret:
                 return (strategy.id, rule.id, True)
     return (-1, -1, False)
@@ -154,7 +154,7 @@ def ReportRoomStatus(request):
                 msg = "ok"
         except Exception, e:
             msg = "failed"
-            print "failed"
+            print "failed",e
     if not is_add:
         msg = "user not add!"
         for person in person_list:
