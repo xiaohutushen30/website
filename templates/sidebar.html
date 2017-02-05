@@ -55,7 +55,7 @@
                                             <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listuserurl" %}>用户管理</a>
                                         </td>
                                     </tr>
-                                    <!-- <tr>
+        <!--                             <tr>
                                         <td>
                                             <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "listroleurl" %}>角色管理</a>
                                         </td>
@@ -94,12 +94,12 @@
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" class="collapsed"><span class="glyphicon glyphicon-list-alt btn-xs"></span>策略管理</a>
                         </h4>
                     </div>
-                    <div id="collapseFour" class="panel-collapse collapse {% if 'strategy' in request.path %} in {% endif %}">
+                    <div id="collapseFive" class="panel-collapse collapse {% if 'strategy' in request.path %} in {% endif %}">
                         <div class="panel-body">
                             <table class="table">
                                 <tbody><tr>
                                     <td>
-                                        <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "liststrategyurl" %}>访客管理</a>
+                                        <span class="glyphicon glyphicon-tree-conifer btn-xs"></span><a href={% url "liststrategyurl" %}>策略管理</a>
                                     </td>
                                 </tr>
                             </tbody></table>

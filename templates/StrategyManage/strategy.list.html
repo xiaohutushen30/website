@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 
 {% block title %}
-    List User
+    Role List
 {% endblock %}
 
 {% block content %}
     <div class="btn-toolbar">
         <div class="btn-group">
-            {% url "addvisitorurl" as theaddvisitorurl %}
-            <a class="btn btn-default {%if request.path = theaddvisitorurl%} active {%endif%}" href={{ theaddvisitorurl }}><span class="glyphicon glyphicon-edit"></span>新建访客</a>
-            {% url "listvisitorurl" as thelistvisitorurl %}
-            <a class="btn btn-default {%if request.path = thelistvisitorurl%} active {%endif%}" href={{ thelistvisitorurl }}><span class="glyphicon glyphicon-list"></span>访客列表</a>
+            {% url "addstrategyurl" as theaddstrategyurl %}
+            <a class="btn btn-default {%if request.path = theaddstrategyurl%} active {%endif%}" href={{ theaddstrategyurl }}><span class="glyphicon glyphicon-edit"></span>新建策略</a>
+            {% url "liststrategyurl" as theliststrategyurl %}
+            <a class="btn btn-default {%if request.path = theliststrategyurl%} active {%endif%}" href={{ theliststrategyurl }}><span class="glyphicon glyphicon-list"></span>策略列表</a>
         </div>
     </div>
 
@@ -18,45 +18,23 @@
 
     <table class="table table-hover table-striped  table-bordered table-condensed">
         <tr>
-            <th>内部员工</th>
-            <th>标识</th>
-            <th>姓名</th>
-            <th>性别</th>
-            <th>手机</th>
-            <th>身份证号</th>
-            <th>绑定</th>
+            <th>策略名称</th>
+            <th>备注</th>
             <th>操作</th>
         </tr>
 
-            {% for i in lPage %}
-                <tr style="font-size: 13px;">
-                    <td>
-                        {% if i.is_staff %}
-                            <span class="label label-success">是</span>
-                        {% else %}
-                            <span class="label label-default">否</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ i.personsn }}</td>
-                    <td>{{ i.username }}</td>
-                    <td>{{ i.sex|default:"----" }}</td>
-                    <td>{{ i.phone|default:"" }}</td>
-                    <td>{{ i.id_card }}</td>
-                    <td>
-                        {% if i.is_bind %}
-                            <span class="label label-success">是</span>
-                        {% else %}
-                            <span class="label label-default">否</span>
-                        {% endif %}
-                    </td>
-                    <td class="host_buttom">
-                        <a class="btn btn-warning btn-xs"  href={% url "editvisitorurl" i.id %} onclick="return confirm('是否确认编辑？')">编辑</a>
-                        <a class="btn btn-danger btn-xs" href={% url "deletevisitorurl" i.id %} onclick="return confirm('是否确认删除？')">删除</a>
-                    </td>
-                </tr>
-            {% endfor %}
+        {% for i in lPage %}
+            <tr style="font-size: 13px;">
+                <td>{{ i.name }} </td>
+                <td>{{ i.remarks }} </td>
+                <td>
+                    <a href={% url "editstrategyurl" i.id %} onclick="return confirm('确认编辑策略吗？？')"><span class="glyphicon glyphicon-edit btn-xs"></span></a>
+                    <a href={% url "deletestrategyurl" i.id %} onclick="return confirm('确认删除策略吗？？')"><span class="glyphicon glyphicon-trash btn-xs"></span></a>
+                </td>
+            </tr>
+        {% endfor %}
 
-        </table>
+    </table>
 
     {% include "common/paginator.html" %}
 {% endblock %}

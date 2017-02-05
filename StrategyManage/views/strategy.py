@@ -9,19 +9,19 @@ from django.contrib.auth.decorators import login_required
 from website.common.CommonPaginator import SelfPaginator
 from UserManage.views.permission import PermissionVerify
 
-from StrategyManage.forms import AddStrategyForm, EditStrategyForm
-from StrategyManage.models import Rules, Strategys
+from StrategyManage.forms import StrategyForm
+from StrategyManage.models import RuleList, StrategyList
 
 @login_required
 @PermissionVerify()
 def AddStrategy(request):
     if request.method == "POST":
-        form = AddStrategyForm(request.POST)
+        form = StrategyForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('liststrategyurl'))
     else:
-        form = AddStrategyForm()
+        form = StrategyForm()
 
     kwvars = {
         'form':form,
@@ -33,7 +33,7 @@ def AddStrategy(request):
 @login_required
 @PermissionVerify()
 def ListStrategy(request):
-    mList = Strategys.objects.all()
+    mList = StrategyList.objects.all()
 
     #分页功能
     lst = SelfPaginator(request,mList, 20)
@@ -48,15 +48,15 @@ def ListStrategy(request):
 @login_required
 @PermissionVerify()
 def EditStrategy(request,ID):
-    istrategy = Strategys.objects.get(id=ID)
+    istrategy = StrategyList.objects.get(id=ID)
 
     if request.method == "POST":
-        form = EditStrategyForm(request.POST,instance=istrategy)
+        form = StrategyForm(request.POST,instance=istrategy)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('liststrategyurl'))
     else:
-        form = EditStrategyForm(instance=istrategy)
+        form = StrategyForm(instance=istrategy)
 
     kwvars = {
         'ID':ID,
@@ -69,6 +69,6 @@ def EditStrategy(request,ID):
 @login_required
 @PermissionVerify()
 def DeleteStrategy(request,ID):
-    Strategys.objects.filter(id = ID).delete()
+    StrategyList.objects.filter(id = ID).delete()
 
     return HttpResponseRedirect(reverse('liststrategyurl'))

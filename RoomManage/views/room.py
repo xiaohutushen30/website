@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from website.common.CommonPaginator import SelfPaginator
 from UserManage.views.permission import PermissionVerify
 
-from RoomManage.forms import ListRoomForm, EditRoomForm, AddRoomForm
+from RoomManage.forms import EditRoomForm, AddRoomForm
 from RoomManage.models import Room
 
 @login_required

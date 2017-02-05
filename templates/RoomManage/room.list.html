@@ -20,7 +20,8 @@
         <tr>
             <th>机房编号</th>
             <th>机房名称</th>
-            <th>是否启用</th>
+            <th>是否可用</th>
+            <th>自动报警</th>
             <th>操作</th>
         </tr>
 
@@ -36,9 +37,15 @@
                     {% endif %}
                 </td>
                 <td>
+                    {% if i.auto_warning %}
+                        <span class="label label-success">启用</span>
+                    {% else %}
+                        <span class="label label-default">禁用</span>
+                    {% endif %}
+                </td>
+                <td>
                     <a class="btn btn-warning btn-xs" href={% url "editroomurl" i.id %} onclick="return confirm('确认编辑机房吗？？')">编辑</a>
                     <a class="btn btn-danger btn-xs" href={% url "deleteroomurl" i.id %} onclick="return confirm('确认删除机房吗？？')">删除</a>
-                    <a class="btn btn-primary btn-xs" href="#" onclick="">报警设置</a>
                 </td>
             </tr>
         {% endfor %}

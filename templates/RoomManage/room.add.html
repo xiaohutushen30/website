@@ -27,7 +27,7 @@
         {% for item in form %}
             <div class="form-group">
                 <label class="control-label col-md-1">{{item.label}}</label>
-                <div class="col-md-2">
+                <div class="col-md-11">
                     {{item}}
                 </div>
                 <div class="col-md-offset-1 col-md-10">
@@ -45,9 +45,9 @@
     </form>
 
     <script>
-        var demo1 = $('select[name="permission"]').bootstrapDualListbox({
-              nonSelectedListLabel: '可选择权限',
-              selectedListLabel: '已选择权限',
+        var demo1 = $('select[name="strategys"]').bootstrapDualListbox({
+              nonSelectedListLabel: '可选择策略',
+              selectedListLabel: '已选择策略',
               preserveSelectionOnMove: 'moved',
               moveOnSelect: false,
         });
