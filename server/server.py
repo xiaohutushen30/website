@@ -198,7 +198,7 @@ class TCPServer():
         ir_person_num = int(data[24:26],16)
         frid_person_num = int(data[26:28],16)
         #非人员信息长度21
-        persons_len = len(data) - 21*2
+        persons_len = len(data) - 22*2
         #一条人员信息长度13
         if persons_len % (13*2) != 0:
             print "persons info is error!"

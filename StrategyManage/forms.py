@@ -9,10 +9,10 @@ from StrategyManage.models import RuleList,StrategyList
 class StrategyForm(forms.ModelForm):
     class Meta:
         model = StrategyList
-        fields = ('name','strategys','remarks')
+        fields = ('name','rules','remarks')
         widgets = {
             'name' : forms.TextInput(attrs={'class':'form-control'}),
-            'strategys' : forms.SelectMultiple(attrs={'class':'form-control','size':'10','multiple':'multiple'}),
+            'rules' : forms.SelectMultiple(attrs={'class':'form-control','size':'10','multiple':'multiple'}),
             'remarks' : forms.TextInput(attrs={'class':'form-control'}),
             #'permission' : forms.CheckboxSelectMultiple(choices=[(x.id,x.name) for x in PermissionList.objects.all()]),
         }
@@ -21,7 +21,7 @@ class StrategyForm(forms.ModelForm):
         super(StrategyForm,self).__init__(*args,**kwargs)
         self.fields['name'].label=u'名 称'
         self.fields['name'].error_messages={'required':u'请输入名称'}
-        self.fields['strategys'].label=u'策 略'
-        self.fields['strategys'].required=False
+        self.fields['rules'].label=u'策 略'
+        self.fields['rules'].required=False
         self.fields['remarks'].label=u'备 注'
 
