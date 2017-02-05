@@ -25,7 +25,7 @@ import rules as Rules
 def ListRoomStatus(request, SN):
     print SN
     room = Room.objects.get(roomsn=SN)
-    mList = RoomStatus.objects.filter(room_id = room.id)
+    mList = RoomStatus.objects.filter(room_id = room.id).order_by('-id')
 
     #分页功能
     lst = SelfPaginator(request,mList, 20)
