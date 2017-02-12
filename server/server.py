@@ -250,7 +250,7 @@ class TCPServer():
         #self.dict_msg[ts].put(str("ok"))
         #print "report ok"
 
-class SimpleChat(WebSocket):
+class WebSocketServer(WebSocket):
 
     def handleMessage(self):
         for client in clients:
@@ -271,7 +271,7 @@ class SimpleChat(WebSocket):
 
 
 if __name__=='__main__':
-    server1 = SimpleWebSocketServer('', 8088, SimpleChat)
+    server1 = SimpleWebSocketServer('', 8088, WebSocketServer)
     web_server = threading.Thread(target=server1.serveforever)
     server2 = TCPServer()
     tcp_server = threading.Thread(target=server2.run)
